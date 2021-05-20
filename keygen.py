@@ -1,5 +1,6 @@
 from hashlib import new
 import random
+from tkinter.ttk import Style
 import PySimpleGUI as sg
 import os
 
@@ -7,14 +8,14 @@ from PySimpleGUI.PySimpleGUI import Combo, EVENT_SYSTEM_TRAY_ICON_DOUBLE_CLICKED
 
 class Gen_PassWd:
     def __init__(self):
-        sg.theme('DarkBlack')
+        sg.theme('Black')
         layout = [
-            [sg.Text('Where', size=(10,1)),
-            sg.Input(key='site', size=(20,1))],
-            [sg.Text('Login', size=(10,1)),
-            sg.Input(key='user', size=(20,1))],
-            [sg.Text('Number of chars'), sg.Combo(values=list(range(30)), key='total_chars', default_value=1,size=(3,1))],
-            [sg.Output(size=(32,5))],
+            [sg.Text('Website', size=(15,1)),
+            sg.Input(key='site', size=(25,2))],
+            [sg.Text('My Login', size=(15,1)),
+            sg.Input(key='user', size=(25,2))],
+            [sg.Text('Number of chars'), sg.Combo(values=list(range(5,31)), key='total_chars', default_value=15,size=(3,1))],
+            [sg.Output(size=(40,7))],
             [sg.Button('Generate')]
         ]
         self.win = sg.Window('Password Generator', layout)
@@ -26,6 +27,8 @@ class Gen_PassWd:
                 break
             if even == 'Generate':
                 new_pwd = self.generate_pwd(val)
+                print(new_pwd)
+                self.savePwd(new_pwd,val)
 
     def generate_pwd(self, val):
         char_list='QWERTYUIOPÇLKJHGFDSAMNBVCXZqwertyuiopçlkjhgfdsazxcvbnm!@#$%&¨*'
@@ -33,8 +36,9 @@ class Gen_PassWd:
         new_pass = ''.join(chars)
         return new_pass
 
-    def savePwd(self):
-        pass
+    def savePwd(self, new_pwd, val):
+        with open('password.txt', 'a', newline='') as archive:
+            archive.write(f"site: {val['site']}, User: {val['user']}, Password: {new_pwd}")
 
 
 gen = Gen_PassWd()
